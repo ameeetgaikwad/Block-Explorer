@@ -1,9 +1,16 @@
 import { Alchemy, Network } from "alchemy-sdk";
 import { useEffect, useState } from "react";
-
-import "./App.css";
-import { Home } from "./components/home";
-
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from "@chakra-ui/react";
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
 // level code.
@@ -19,12 +26,18 @@ const settings = {
 //   https://docs.alchemy.com/reference/alchemy-sdk-api-surface-overview#api-surface
 const alchemy = new Alchemy(settings);
 
-function App() {
-  return (
-    <div>
-      <Home></Home>
-    </div>
-  );
-}
+export function Home() {
+  const [blockNumber, setBlockNumber] = useState();
+  const [recentBlocks, setRecentBlocks] = useState();
+  useEffect(() => {
+    const getRecentBlocks = async () => {
+      const blockNumber = await alchemy.core.getBlockNumber();
+      setBlockNumber(blockNumber);
+      for (i = blockNumber; i >= blockNumber - 10; i--) {
+        const block = await alchemy.core.getBlock(i);
+      }
+    };
+  });
 
-export default App;
+  return <div className="App">Block Number: {blockNumber}</div>;
+}
