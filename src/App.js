@@ -1,6 +1,6 @@
 import { Alchemy, Network } from "alchemy-sdk";
 import { useEffect, useState } from "react";
-
+import React from "react";
 import "./App.css";
 import { Home } from "./components/home";
 
@@ -21,9 +21,9 @@ const alchemy = new Alchemy(settings);
 
 function App() {
   return (
-    <div>
+    <React.Fragment>
       <Home></Home>
-    </div>
+    </React.Fragment>
   );
 }
 
