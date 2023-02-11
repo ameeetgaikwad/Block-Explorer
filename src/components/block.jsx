@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Params, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { alchemy } from "./home";
 import {
   Table,
@@ -25,6 +25,8 @@ import {
   Button,
 } from "@chakra-ui/react";
 
+import { Link } from "react-router-dom";
+
 export function Block() {
   const { id } = useParams();
   const [block, setBlock] = useState();
@@ -38,7 +40,7 @@ export function Block() {
     console.log(block);
   }, [id]);
   return (
-    <Box>
+    <Box backgroundColor={"gray.900"} color={"white"} h={window.innerHeight}>
       {!block ? (
         <Flex
           justifyContent="center"
@@ -50,13 +52,15 @@ export function Block() {
           <Text fontSize={"17px"}>Fetching data from Ethereum...</Text>
         </Flex>
       ) : (
-        <Flex>
+        <Flex flexDirection="row" justifyContent={"start"} paddingTop={"3"}>
           <TableContainer>
-            <Table variant="simple" size={"lg"}>
+            <Table variant="simple" size={"lg"} w={window.innerWidth}>
               <TableCaption
                 placement="top"
                 fontSize={"20px"}
                 fontWeight={"bold"}
+                borderTopRadius={"20px"}
+                color={"whiteAlpha.900"}
               >
                 #Block {id}
               </TableCaption>
@@ -76,7 +80,17 @@ export function Block() {
                 </Tr>
                 <Tr>
                   <Td>Miner:</Td>
-                  <Td>{block.miner}</Td>
+                  <Td>
+                    <Text
+                      as="u"
+                      color={"teal.100"}
+                      _hover={{
+                        color: "teal.200",
+                      }}
+                    >
+                      <Link to={`/address/${block.miner}`}>{block.miner}</Link>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>Block Height:</Td>

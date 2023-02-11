@@ -24,26 +24,39 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
+import { Link } from "react-router-dom";
+
 import { useParams } from "react-router-dom";
 import { alchemy } from "./home";
+const { Utils } = require("alchemy-sdk");
 
 export function TransactionHash() {
   const { id } = useParams();
   const [recentTransaction, setRecentTransactions] = useState();
   const [block, setBlock] = useState();
+  const [value, setValue] = useState();
   useEffect(() => {
     const getTransaction = async () => {
       const recentTransaction = await alchemy.core.getTransactionReceipt(id);
       setRecentTransactions(recentTransaction);
 
-      const block = await alchemy.core.getBlock(recentTransaction.blockNumber);
-
+      const block = await alchemy.core.getBlockWithTransactions(
+        recentTransaction.blockNumber
+      );
       setBlock(block);
+
+      let value;
+      for (let i = 0; i < block.transactions.length; i++) {
+        if (recentTransaction.transactionHash === block.transactions[i].hash) {
+          value = Utils.formatEther(block.transactions[i].value);
+          setValue(value);
+        }
+      }
     };
     getTransaction();
   }, [id]);
   return (
-    <Box>
+    <Box backgroundColor={"gray.900"} color={"white"} h={window.innerHeight}>
       {!recentTransaction || !block ? (
         <Flex
           justifyContent="center"
@@ -56,18 +69,16 @@ export function TransactionHash() {
         </Flex>
       ) : (
         <Flex flexDirection="row" justifyContent={"start"} paddingTop={"3"}>
-          <TableContainer
-            overflowY="auto"
-            maxHeight="630px"
-            borderBottom={"2px solid white"}
-          >
-            <Table variant="striped" size="lg" w={window.innerWidth}>
+          <TableContainer overflowY="auto" maxHeight="630px">
+            <Table variant="simple" size="lg" w={window.innerWidth}>
               <TableCaption
                 placement="top"
                 fontSize={"20px"}
                 fontWeight={"bold"}
+                borderTopRadius={"20px"}
+                color={"whiteAlpha.900"}
               >
-                #Transaction {id}
+                #Transaction
               </TableCaption>
               <Tbody>
                 <Tr>
@@ -80,11 +91,35 @@ export function TransactionHash() {
                 </Tr>
                 <Tr>
                   <Td>From:</Td>
-                  <Td>{recentTransaction.from}</Td>
+                  <Td>
+                    <Text
+                      as="u"
+                      color={"teal.100"}
+                      _hover={{
+                        color: "teal.200",
+                      }}
+                    >
+                      <Link to={`/address/${recentTransaction.from}`}>
+                        {recentTransaction.from}
+                      </Link>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>To:</Td>
-                  <Td>{recentTransaction.to}</Td>
+                  <Td>
+                    <Text
+                      as="u"
+                      color={"teal.100"}
+                      _hover={{
+                        color: "teal.200",
+                      }}
+                    >
+                      <Link to={`/address/${recentTransaction.to}`}>
+                        {recentTransaction.to}
+                      </Link>
+                    </Text>
+                  </Td>
                 </Tr>
                 <Tr>
                   <Td>Gas Used:</Td>
@@ -93,6 +128,12 @@ export function TransactionHash() {
                 <Tr>
                   <Td>Gas Limit:</Td>
                   <Td>{block.gasLimit.toString()}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Value:</Td>
+                  <Td>
+                    <Badge>{value} ETH</Badge>
+                  </Td>
                 </Tr>
               </Tbody>
             </Table>

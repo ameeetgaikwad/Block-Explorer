@@ -39,30 +39,50 @@ export function Address() {
     getBalance();
   }, [id]);
   return (
-    <Box>
-      <Flex flexDirection="row" justifyContent={"start"} paddingTop={"3"}>
-        <TableContainer
-          overflowY="auto"
-          maxHeight="630px"
-          borderBottom={"2px solid white"}
+    <Box backgroundColor={"gray.900"} color={"white"} h={window.innerHeight}>
+      {!balance ? (
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          h="100%"
+          flexDirection="column"
         >
-          <Table variant="striped" size="lg" w={window.innerWidth}>
-            <TableCaption placement="top" fontSize={"20px"} fontWeight={"bold"}>
-              Address
-            </TableCaption>
-            <Tbody>
-              <Tr>
-                <Td>Address:</Td>
-                <Td>{id}</Td>
-              </Tr>
-              <Tr>
-                <Td>Balance:</Td>
-                <Td>{balance.slice(0, 6)}</Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </TableContainer>
-      </Flex>
+          <CircularProgress isIndeterminate color="green.300" size={"55px"} />
+          <Text fontSize={"17px"}>Fetching data from Ethereum...</Text>
+        </Flex>
+      ) : (
+        <Flex flexDirection="row" justifyContent={"start"} paddingTop={"3"}>
+          <TableContainer
+            overflowY="auto"
+            maxHeight="630px"
+            borderBottom={"2px solid white"}
+          >
+            <Table variant="simple" size="lg" w={window.innerWidth}>
+              <TableCaption
+                placement="top"
+                fontSize={"20px"}
+                fontWeight={"bold"}
+                borderTopRadius={"20px"}
+                color={"whiteAlpha.900"}
+              >
+                Address
+              </TableCaption>
+              <Tbody>
+                <Tr>
+                  <Td>Address:</Td>
+                  <Td>{id}</Td>
+                </Tr>
+                <Tr>
+                  <Td>Balance:</Td>
+                  <Td>
+                    <Badge>{balance.slice(0, 6)} ETH</Badge>
+                  </Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Flex>
+      )}
     </Box>
   );
 }
