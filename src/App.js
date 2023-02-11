@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import React from "react";
 import "./App.css";
 import { Home } from "./components/home";
-
+import { Route, Routes } from "react-router-dom";
+import { Address } from "./components/address";
+import { TransactionHash } from "./components/transactionHash";
+import { Block } from "./components/block";
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
 // level code.
@@ -17,13 +20,18 @@ const settings = {
 //
 // You can read more about the packages here:
 //   https://docs.alchemy.com/reference/alchemy-sdk-api-surface-overview#api-surface
-const alchemy = new Alchemy(settings);
+export const alchemy = new Alchemy(settings);
 
 function App() {
   return (
-    <React.Fragment>
-      <Home></Home>
-    </React.Fragment>
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/address/:id" element={<Address />} />
+        <Route path="/block/:id" element={<Block />} />
+        <Route path="/transactionHash/:id" element={<TransactionHash />} />
+      </Routes>
+    </>
   );
 }
 

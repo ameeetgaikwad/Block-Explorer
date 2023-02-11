@@ -1,4 +1,4 @@
-import { Alchemy, Network } from "alchemy-sdk";
+import { Alchemy, Network, Utils } from "alchemy-sdk";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -22,7 +22,10 @@ import {
   Text,
   Badge,
   Button,
+  Tooltip,
 } from "@chakra-ui/react";
+
+import { Link } from "react-router-dom";
 
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
@@ -37,7 +40,7 @@ const settings = {
 //
 // You can read more about the packages here:
 //   https://docs.alchemy.com/reference/alchemy-sdk-api-surface-overview#api-surface
-const alchemy = new Alchemy(settings);
+export const alchemy = new Alchemy(settings);
 
 export function Home() {
   const [blockNumber, setBlockNumber] = useState();
@@ -100,11 +103,19 @@ export function Home() {
             maxHeight="630px"
             borderBottom={"2px solid white"}
           >
-            <Table variant="simple" size="lg">
+            <Table
+              variant="simple"
+              size="lg"
+              bg={"black"}
+              borderBottomEndRadius={"20px"}
+            >
               <TableCaption
                 placement="top"
                 fontSize={"20px"}
                 fontWeight={"bold"}
+                bg={"black"}
+                borderTopRadius={"20px"}
+                color={"whiteAlpha.900"}
               >
                 Latest Blocks
               </TableCaption>
@@ -112,8 +123,32 @@ export function Home() {
                 {recentBlocks.map((block, i) => {
                   return (
                     <Tr key={i}>
-                      <Td>Block {block.number}</Td>
-                      <Td>Fee recipient {block.miner.slice(1, 16)}...</Td>
+                      <Td>
+                        Block{" "}
+                        <Text
+                          as="u"
+                          color={"teal.100"}
+                          _hover={{
+                            color: "teal.200",
+                          }}
+                        >
+                          <Link to={`/block/${block.number}`}>
+                            {block.number}
+                          </Link>
+                        </Text>
+                      </Td>
+                      <Td>
+                        Fee recipient{" "}
+                        <Text
+                          as="u"
+                          color={"teal.100"}
+                          _hover={{ color: "teal.200" }}
+                        >
+                          <Link to={`/address/${block.miner}`}>
+                            {block.miner.slice(0, 16)}...
+                          </Link>
+                        </Text>
+                      </Td>
                       <Td>
                         <Badge> {block.transactions.length} Txs</Badge>
                       </Td>
@@ -129,11 +164,19 @@ export function Home() {
             maxHeight="630px"
             borderBottom={"2px solid white"}
           >
-            <Table variant="simple" size="lg">
+            <Table
+              variant="simple"
+              size="lg"
+              bg={"black"}
+              borderBottomEndRadius={"20px"}
+            >
               <TableCaption
                 placement="top"
                 fontSize={"20px"}
                 fontWeight={"bold"}
+                bg={"black"}
+                borderTopRadius={"20px"}
+                color={"whiteAlpha.900"}
               >
                 Latest Transactions
               </TableCaption>
@@ -141,13 +184,45 @@ export function Home() {
                 {recentTransactions.map((transaction, i) => {
                   return (
                     <Tr key={i}>
-                      <Td> {transaction.hash.slice(0, 16)}...</Td>
                       <Td>
-                        From: {transaction.from.slice(0, 16)}...
-                        <br />
-                        To: {transaction.to.slice(0, 16)}...
+                        <Text
+                          as="u"
+                          color={"teal.100"}
+                          _hover={{ color: "teal.200" }}
+                        >
+                          <Link to={`/transactionHash/${transaction.hash}`}>
+                            {transaction.hash.slice(0, 16)}...
+                          </Link>
+                        </Text>
                       </Td>
-                      <Td>Tx</Td>
+                      <Td>
+                        From:{" "}
+                        <Text
+                          as="u"
+                          color={"teal.100"}
+                          _hover={{ color: "teal.200" }}
+                        >
+                          <Link to={`/address/${transaction.from}`}>
+                            {transaction.from.slice(0, 16)}...
+                          </Link>
+                        </Text>
+                        <br />
+                        To:{" "}
+                        <Text
+                          as="u"
+                          color={"teal.100"}
+                          _hover={{ color: "teal.200" }}
+                        >
+                          <Link to={`/address/${transaction.to}`}>
+                            {transaction.to.slice(0, 16)}...
+                          </Link>
+                        </Text>
+                      </Td>
+                      <Td>
+                        <Badge>
+                          {Utils.formatEther(transaction.value).slice(0, 5)}ETH
+                        </Badge>
+                      </Td>
                     </Tr>
                   );
                 })}
