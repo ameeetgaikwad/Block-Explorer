@@ -79,7 +79,7 @@ export function Home() {
   return (
     <Box backgroundColor={"gray.900"} color={"white"} h={window.innerHeight}>
       <Center fontSize="30px" fontWeight="black" paddingBottom={3}>
-        <Link to={`/address`}>Ethereum Block Explorer</Link>
+        <Link to={`/`}>Ethereum Block Explorer</Link>
       </Center>
       <hr />
       {!recentBlocks || !recentTransactions ? (
