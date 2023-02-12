@@ -27,7 +27,6 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Block-Explorer" element={<Home />} />
         <Route path="/address/:id" element={<Address />} />
         <Route path="/block/:id" element={<Block />} />
         <Route path="/transactionHash/:id" element={<TransactionHash />} />
