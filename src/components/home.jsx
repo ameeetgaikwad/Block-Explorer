@@ -23,6 +23,7 @@ import {
   Badge,
   Button,
   Tooltip,
+  color,
 } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";

@@ -7,6 +7,7 @@ import { Route, Routes } from "react-router-dom";
 import { Address } from "./components/address";
 import { TransactionHash } from "./components/transactionHash";
 import { Block } from "./components/block";
+
 // Refer to the README doc for more information about using API
 // keys in client-side code. You should never do this in production
 // level code.
@@ -31,6 +32,19 @@ function App() {
         <Route path="/block/:id" element={<Block />} />
         <Route path="/transactionHash/:id" element={<TransactionHash />} />
       </Routes>
+
+      <footer>
+        <p>
+          Made by{" "}
+          <a
+            href="https://github.com/ameeetgaikwad"
+            target="_blank"
+            className="github-link"
+          >
+            Amit
+          </a>
+        </p>
+      </footer>
     </>
   );
 }
